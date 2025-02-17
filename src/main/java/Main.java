@@ -73,7 +73,8 @@ public class Main {
             }
         }
         if(object != null) {
-            System.out.println("Most recent repo is: " + object.get("name") + " pushed at: " + date);
+            //System.out.println("Most recent repo is: " + object.get("name") + " pushed at: " + date + "coded in: " + object.get("language")));
+            printJSON(object, 0);
         }
       
 
@@ -89,4 +90,32 @@ public class Main {
         return JSONResponse.toString();
     }
 
-}
+    private static void printIndent(int indent) {
+        for(int i = 0; i < indent; i++) {
+            System.out.printf("   ");
+        }
+    }
+
+    private static void printJSON(JSONObject object, int indent) {
+        System.out.printf("{\n");
+
+        for(Object keyObject : object.keySet()) {
+            String key = (String) keyObject;
+            Object val =  object.get(key);
+
+            printIndent(indent + 1);
+            System.out.printf("%s: ", key);
+            if(val instanceof JSONObject) {
+                printJSON((JSONObject) val, indent + 1);
+            }
+            else {
+                System.out.printf("%s\n: ", val);
+            }
+        }
+        printIndent(indent);
+        System.out.printf("}\n");
+
+        }
+    }
+
+
