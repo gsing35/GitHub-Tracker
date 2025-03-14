@@ -13,6 +13,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.json.simple.JSONArray;
 
+//Prompts the user for a GitHub username, constructs the API request URL, and calls
 public class Main {
     public static void main(String[] args) {
         Scanner Scan = new Scanner(System.in);
@@ -25,13 +26,17 @@ public class Main {
         HttpResponse<String> response = null;
         try {
             URI uri = new URI("https://api.github.com/users/" + username + "/repos");
-            fetchAPIResponse(uri, client, response);
+            fetchAPIResponse(uri, client, response);    //retrieve repository data.
         } catch(Exception e) {
             System.out.println("Error: "); 
             e.printStackTrace();
         }
     }
 
+
+    /*Sends an HTTP request to GitHub’s API, retrieves the response,
+     *parses it as JSON, and identifies the most recently updated repository.
+    */
     private static void fetchAPIResponse(URI uri, HttpClient client, HttpResponse<String> response) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -51,7 +56,7 @@ public class Main {
             return;
         }
         
-        String JSONResponse = parseResponse(response);
+        String JSONResponse = parseResponse(response);    //Reads the HTTP response body line by line and returns it as a single string.
 
         //Parse the JSON response
         JSONParser parser = new JSONParser();
@@ -80,6 +85,7 @@ public class Main {
 
     }
 
+    //Reads the HTTP response body line by line and returns it as a single string.
     private static String parseResponse(HttpResponse<String> response) {
         StringBuilder JSONResponse = new StringBuilder();
         Scanner Scanner = new Scanner(response.body());
@@ -90,12 +96,14 @@ public class Main {
         return JSONResponse.toString();
     }
 
+    // Prints spaces to format JSON output with proper indentation to look at JSON. 
     private static void printIndent(int indent) {
         for(int i = 0; i < indent; i++) {
             System.out.printf("   ");
         }
     }
 
+    // Recursively prints a JSON object with indentation for better readability.
     private static void printJSON(JSONObject object, int indent) {
         System.out.printf("{\n");
 
